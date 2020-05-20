@@ -16,6 +16,25 @@
 #                                                                           #
 #***************************************************************************#
 
+# TODO: Make a node_modules flag
+# TODO: Make a ./test flag
+
+help () {
+	printf "fvim - An easier way to modify long files\n"
+	printf "  For when tab completion just takes too long\n\n"
+	printf "  USAGE:\n"
+	printf "    fvim\n"
+	printf "    fvim -h\n"
+	printf "    fvim foo\n"
+	printf "  OPTIONS:\n"
+	printf "    -h -- Show this message\n"
+	printf "  FUTURE OPTIONS:\n"
+	printf "    -n -- Include ./node_modules/ into search\n"
+	printf "      fvim foo -n\n"
+	printf "    -t -- Include ./tests/ into search\n"
+	printf "      fvim foo -t\n"
+	printf "  \n"
+}
 
 # @param $1 - pattern to match
 # @param $2 - exclude dir
@@ -67,11 +86,15 @@ confirm () {
 
 if [ $# -eq 0 ] ;
 then
-	# TODO: do a help()
-	echo "No argument supplied"
-	return 1
+	printf "No argument supplied\n\n"
+	help
+else
+	if [[ $1 == "-h" ]] || [[ $2 == "-h" ]]; then
+		help
+	else
+		shopt -s dotglob
+		shopt -s nullglob
+		fvim $1
+	fi
 fi
 
-shopt -s dotglob
-shopt -s nullglob
-fvim $1
