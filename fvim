@@ -1,0 +1,71 @@
+#!/bin/sh
+#***************************************************************************#
+#***************************************************************************#
+#                            PATCH SCRIPT                                   #
+#***************************************************************************#
+#***************************************************************************#
+#                                                                           #
+# Author: Tanner Woody                                                      #
+# Date: 2020-05-19                                                          #
+# Last Update: 2020-05-19                                                   #
+#                                                                           #
+#***************************************************************************#
+#                                                                           #
+# Purpose:                                                                  #
+#  Make `vim file` smarter and easier                                       #
+#                                                                           #
+#***************************************************************************#
+
+
+# @param $1 - pattern to match
+# @param $2 - exclude dir
+fvim () {
+	ret=''
+	for match in `find . -iname "*$1*" -not -path "./node_modules/*"`;do
+		local res=$(confirm "Open $match: ")
+		if [ "$res" -eq "1" ]; then
+			ret=$match
+			break
+		fi
+	done
+	# If we found a file, open it
+	if [ -n "$ret" ]; then
+		vim $ret
+	else
+		printf "NO MATCHES FOUND\n"
+	fi
+	return
+}
+
+# Ask a question an return input
+# @param1 - Message
+# @return - Boolean if confirmed or not
+confirm () {
+	while true; do
+	read -p "$1 " foo
+		case $foo in
+			[yY]*)
+				echo 1
+				break
+				;;
+			[nN]*)
+				echo 0
+				break
+				;;
+			*)
+				printf "\tBAD INPUT\n"
+		esac
+	done
+	return
+}
+
+if [ $# -eq 0 ] ;
+then
+	# TODO: do a help()
+	echo "No argument supplied"
+	return 1
+fi
+
+shopt -s dotglob
+shopt -s nullglob
+fvim $1
