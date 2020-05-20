@@ -1,7 +1,7 @@
 #!/bin/sh
 #***************************************************************************#
 #***************************************************************************#
-#                            PATCH SCRIPT                                   #
+#                            MAIN  SCRIPT                                   #
 #***************************************************************************#
 #***************************************************************************#
 #                                                                           #
@@ -27,6 +27,10 @@ fvim () {
 			ret=$match
 			break
 		fi
+		if [ "$res" -eq "-1" ]; then
+			printf "ABORTED\n"
+			return
+		fi
 	done
 	# If we found a file, open it
 	if [ -n "$ret" ]; then
@@ -37,7 +41,7 @@ fvim () {
 	return
 }
 
-# Ask a question an return input
+# Ask a question and return input
 # @param1 - Message
 # @return - Boolean if confirmed or not
 confirm () {
@@ -52,8 +56,10 @@ confirm () {
 				echo 0
 				break
 				;;
-			*)
-				printf "\tBAD INPUT\n"
+			[qQ]*)
+				echo -1
+				break
+				;;
 		esac
 	done
 	return
