@@ -8,3 +8,7 @@
 1. `fvim main`
 2. `fvim foo`
 3. `fvim bar`
+
+### Confirmation options
+1. [Yy]es and [Nn]o are self explanatory
+2. Option to [q]uit the search
